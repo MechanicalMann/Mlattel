@@ -30,6 +30,6 @@ class KeyboardInput(Input):
         if key.name == 's':
             self.on_release_score()
 
-    def listen(self):
+    async def listen(self):
         keyboard.on_press(self.on_press)
         keyboard.wait('ctrl+c')

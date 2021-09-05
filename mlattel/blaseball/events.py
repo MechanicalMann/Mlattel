@@ -22,6 +22,7 @@ class GameEvent(object):
         self.away_pitcher = event['awayPitcherName']
         self.home_pitcher = event['homePitcherName']
         self.runners = event['baseRunnerNames']
+        self.bases_occupied = event['basesOccupied']
         if event['awayBatterName']:
             self.batter = event['awayBatterName']
         else:
@@ -59,6 +60,8 @@ class Game(object):
         self.away_team_nick = game['awayTeamNickname']
         self.home_pitcher = game['homePitcherName']
         self.away_pitcher = game['awayPitcherName']
+        self.runners = []
+        self.bases_occupied = []
         self.home_score = 0
         self.away_score = 0
         self.inning = 0
@@ -88,6 +91,8 @@ class Game(object):
             self.balls = ge.balls
             self.strikes = ge.strikes
             self.outs = ge.outs
+            self.runners = ge.runners
+            self.bases_occupied = ge.bases_occupied
             self.listener.listen(ge)
             self.prev = ge
             await asyncio.sleep(4)  # roughly approximate a real game feed
