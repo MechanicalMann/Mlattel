@@ -1,10 +1,16 @@
-from mlattel.display.console import ConsoleDisplay
+from mlattel.audio.buzzer import Buzzer
+from mlattel.display.led import LedDisplay
 from mlattel.app import App
-from mlattel.input import KeyboardInput
+from mlattel.input.gpio import GpioInput
 
 
 def main():
-    input = KeyboardInput()
-    display = ConsoleDisplay()
-    app = App(input, display)
-    app.run()
+    try:
+        input = GpioInput()
+        display = LedDisplay()
+        audio = Buzzer()
+        app = App(input, display, audio)
+        app.run()
+    except KeyboardInterrupt:
+        app.stop()
+        input.cleanup()

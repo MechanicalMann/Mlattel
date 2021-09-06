@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
 import asyncio
-from blaseball_mike import database as datablase, eventually, chronicler
+from blaseball_mike import database as datablase, chronicler
 from mlattel.blaseball.types import EventType, guess_event_type
 
 
 # Surely there's a way we could... not do this
 class GameEvent(object):
-    def __init__(self, event: dict, **kwargs) -> None:
+    def __init__(self, event: dict, prev=None, **kwargs) -> None:
+        self.prev = prev
         self.id = event['id']
         self.type = None
         self.balls = event['atBatBalls']
@@ -79,11 +80,11 @@ class Game(object):
         self.prev = None
 
     async def get_events(self):
-        for event in chronicler.get_game_updates(
-                game_ids=['1bf2ec1a-4df8-4446-b7f0-55ba901d4f30'], lazy=True):
+        for event in chronicler.get_game_updates(game_ids=[self.id],
+                                                 lazy=True):
             if not 'data' in event:
                 continue
-            ge = GameEvent(event['data'], game=self)
+            ge = GameEvent(event['data'], self.prev, game=self)
             self.home_score = ge.home_score
             self.away_score = ge.away_score
             self.inning = ge.inning

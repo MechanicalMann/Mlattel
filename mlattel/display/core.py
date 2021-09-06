@@ -14,3 +14,6 @@ class Display(ABC):
     @abstractmethod
     def update(self, event: GameEvent):
         pass
+
+    def clear(self):
+        pass
